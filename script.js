@@ -47,6 +47,9 @@ function handleCSVFile(file) {
                 const budjettipuuHeader = document.createElement("th");
                 budjettipuuHeader.textContent = "Budjettipuu";
                 row.insertBefore(budjettipuuHeader, row.firstChild);
+                const momenttitasoHeader = document.createElement("th");
+                momenttitasoHeader.textContent = "Momenttitaso";
+                row.insertBefore(momenttitasoHeader, row.firstChild);
             } else {
                 // For data rows, calculate and add the "Budjettipuu" value
                 const firstColumn = cells[0] ? cells[0].trim() : "";
@@ -55,6 +58,10 @@ function handleCSVFile(file) {
                 const budjettipuuCell = document.createElement("td");
                 budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}.`;
                 row.insertBefore(budjettipuuCell, row.firstChild);
+
+                const momenttitasoCell = document.createElement("td");
+                momenttitasoCell.textContent = `3`;
+                row.insertBefore(momenttitasoCell, row.firstChild);
 
                 // Store unique values from the first column
                 if (cells[0]) {
@@ -141,6 +148,10 @@ function createMomenttitaso2(lines, uniqueValue) {
     budjettipuuCell.textContent = `${newRowValues[0][0]}.${newRowValues[0][2]}.`;
     newRow.insertBefore(budjettipuuCell, newRow.firstChild);
 
+    const momenttitasoCell = document.createElement("td");
+    momenttitasoCell.textContent = `2`;
+    newRow.insertBefore(momenttitasoCell, newRow.firstChild);
+
     return newRow;
 }
 
@@ -183,6 +194,10 @@ function createMomenttitaso1(lines, uniqueValue) {
     const budjettipuuCell = document.createElement("td");
     budjettipuuCell.textContent = `${newRowValues[0][0]}.`;
     newRow.insertBefore(budjettipuuCell, newRow.firstChild);
+
+    const momenttitasoCell = document.createElement("td");
+    momenttitasoCell.textContent = `1`;
+    newRow.insertBefore(momenttitasoCell, newRow.firstChild);
 
     return newRow;
 }
