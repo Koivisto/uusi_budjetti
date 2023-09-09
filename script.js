@@ -259,24 +259,20 @@ function syncTable() {
     });
 }
 
-// Function to create an empty table row for a missing value
-function createEmptyRow(missingValue) {
+// Function to create an empty row based on missingValues input
+function createEmptyRow(missingValues) {
     const newRow = document.createElement("tr");
 
-    // Create empty cells for each column
-    for (let cellIndex = 0; cellIndex < 21; cellIndex++) {
-        const cellElement = document.createElement("td");
-        cellElement.textContent = "";
-        newRow.appendChild(cellElement);
-    }
+    // Split the missingValues string by "." to count the number of segments
+    const momenttitasoValue = missingValues.split(".").length - 1;
 
-    // Set the "Budjettipuu" and "Momenttitaso" values based on the missingValue
+    // Add the "Budjettipuu" column to the new row
     const budjettipuuCell = document.createElement("td");
-    budjettipuuCell.textContent = missingValue;
+    budjettipuuCell.textContent = missingValues;
     newRow.insertBefore(budjettipuuCell, newRow.firstChild);
 
     const momenttitasoCell = document.createElement("td");
-    momenttitasoCell.textContent = "0"; // You can set the initial Momenttitaso value
+    momenttitasoCell.textContent = momenttitasoValue.toString();
     newRow.insertBefore(momenttitasoCell, newRow.firstChild);
 
     return newRow;
