@@ -38,17 +38,14 @@ function handleCSVFile(file) {
                 row.appendChild(cellElement);
             });
 
-            // Add the "Budjettipuu" and new "Fourth Column" columns to the header and data rows
+            // Add the "Budjettipuu" column to the header and data rows
             if (isFirstRow) {
                 // For the header row, add headers
                 const budjettipuuHeader = document.createElement("th");
                 budjettipuuHeader.textContent = "Budjettipuu";
-                const fourthColumnHeader = document.createElement("th");
-                fourthColumnHeader.textContent = "Fourth Column";
                 row.insertBefore(budjettipuuHeader, row.firstChild);
-                row.appendChild(fourthColumnHeader);
             } else {
-                // For data rows, calculate and add the "Budjettipuu" value and new "Fourth Column" value
+                // For data rows, calculate and add the "Budjettipuu" value
                 const firstColumn = cells[0] ? cells[0].trim() : "";
                 const thirdColumn = cells[2] ? cells[2].trim() : "";
                 const fifthColumn = cells[4] ? cells[4].trim() : "";
@@ -56,19 +53,6 @@ function handleCSVFile(file) {
                 budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}.`;
                 row.insertBefore(budjettipuuCell, row.firstChild);
 
-                // Add a new "Fourth Column" cell with a line break before the value
-                const fourthColumnValue = cells[3] ? cells[3].trim() : "";
-                const fourthColumnCell = document.createElement("td");
-                fourthColumnCell.innerHTML = `<div>${fourthColumnValue}</div>`;
-                row.appendChild(fourthColumnCell);
-            }
-
-            table.appendChild(row);
-
-            // After processing the first row, set the flag to false
-            if (isFirstRow) {
-                isFirstRow = false;
-            } else {
                 // Store unique values from the third column
                 if (cells[2]) {
                     const uniqueValue = cells[2].trim();
@@ -76,6 +60,13 @@ function handleCSVFile(file) {
                         uniqueValues.push(uniqueValue);
                     }
                 }
+            }
+
+            table.appendChild(row);
+
+            // After processing the first row, set the flag to false
+            if (isFirstRow) {
+                isFirstRow = false;
             }
         });
 
