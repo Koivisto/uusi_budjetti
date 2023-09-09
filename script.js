@@ -1,10 +1,17 @@
+// Initialize an array to store unique values from the third column
+const uniqueValues3c = [];
+const uniqueValues1c = [];
+// Create a table element
+const table = document.createElement("table");
+const tableContainer = document.getElementById("tableContainer");
+
 // Function to read a CSV file in "Nordic (ISO 8859-10)" encoding and convert it to UTF-8
 function handleCSVFile(file) {
     const reader = new FileReader();
 
     reader.onload = function (e) {
         const contents = e.target.result;
-        const tableContainer = document.getElementById("tableContainer");
+
 
         // Convert the CSV data to UTF-8 encoding
         //budjetti.vm.fi https://budjetti.vm.fi/indox/opendata/ = iso-8859-10
@@ -14,15 +21,10 @@ function handleCSVFile(file) {
 
         const lines = utf8Text.split("\n");
 
-        // Create a table element
-        const table = document.createElement("table");
+
 
         // Initialize a flag to identify the header row
         let isFirstRow = true;
-
-        // Initialize an array to store unique values from the third column
-        const uniqueValues3c = [];
-        const uniqueValues1c = [];
 
         // Loop through CSV lines
         lines.forEach((line, index) => {
@@ -229,3 +231,53 @@ fileInput.addEventListener("change", (e) => {
         handleCSVFile(selectedFile);
     }
 });
+
+// Add an HTML input field for the new values
+const newValuesInput = document.getElementById("newValuesInput");
+
+// Add a button to trigger the synchronization
+const syncButton = document.getElementById("syncButton");
+syncButton.addEventListener("click", syncTable);
+
+// Function to synchronize the table based on new values
+function syncTable() {
+    const newValues = newValuesInput.value.split("\n").map((value) => value.trim());
+
+    // Find values that are in newValues but not in the current "Budjettipuu" column
+    const missingValues = newValues.filter((newValue) => {
+        // Extract the "Budjettipuu" value from the newValue
+        const budjettipuuValue = newValue.split(".")[0];
+
+        // Check if it doesn't exist in the current "Budjettipuu" values
+        return !uniqueValues1c.includes(budjettipuuValue);
+    });
+
+    // Create empty table rows for missing values
+    missingValues.forEach((missingValue) => {
+        const newRow = createEmptyRow(missingValue);
+        table.appendChild(newRow);
+    });
+}
+
+// Function to create an empty table row for a missing value
+function createEmptyRow(missingValue) {
+    const newRow = document.createElement("tr");
+
+    // Create empty cells for each column
+    for (let cellIndex = 0; cellIndex < 21; cellIndex++) {
+        const cellElement = document.createElement("td");
+        cellElement.textContent = "";
+        newRow.appendChild(cellElement);
+    }
+
+    // Set the "Budjettipuu" and "Momenttitaso" values based on the missingValue
+    const budjettipuuCell = document.createElement("td");
+    budjettipuuCell.textContent = missingValue;
+    newRow.insertBefore(budjettipuuCell, newRow.firstChild);
+
+    const momenttitasoCell = document.createElement("td");
+    momenttitasoCell.textContent = "0"; // You can set the initial Momenttitaso value
+    newRow.insertBefore(momenttitasoCell, newRow.firstChild);
+
+    return newRow;
+}
