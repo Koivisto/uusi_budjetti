@@ -7,8 +7,10 @@ function handleCSVFile(file) {
         const tableContainer = document.getElementById("tableContainer");
 
         // Convert the CSV data to UTF-8 encoding
-        const iso8859_10Decoder = new TextDecoder("iso-8859-10");
-        const utf8Text = iso8859_10Decoder.decode(contents);
+        //budjetti.vm.fi https://budjetti.vm.fi/indox/opendata/ = iso-8859-10
+        //Good practice is UTF-8
+        const encryptionDecoder = new TextDecoder("utf-8"); 
+        const utf8Text = encryptionDecoder.decode(contents);
 
         const lines = utf8Text.split("\n");
 
