@@ -85,7 +85,7 @@ function handleCSVFile(file) {
 }
 
 // Function to create a new row based on a unique value in the third column
-function createNewRow(lines, uniqueValue) {
+function createMomenttitaso2(lines, uniqueValue) {
     const newRow = document.createElement("tr");
 
     // Initialize an array to store values for the new row
