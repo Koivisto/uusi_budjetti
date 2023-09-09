@@ -91,8 +91,8 @@ function createNewRow(lines, uniqueValue) {
     // Initialize an array to store values for the new row
     const newRowValues = [];
 
-    // Initialize a variable to store the total sum of the seventh cell
-    let seventhCellTotal = 0;
+    // Initialize a variable to store the total sum of the eighth cell
+    let eighthCellTotal = 0;
 
     // Find rows with matching values in the first and third columns
     lines.forEach((line) => {
@@ -100,9 +100,9 @@ function createNewRow(lines, uniqueValue) {
         if (cells[0] && cells[0].trim() === newRowValues[0]?.[0] && cells[2] && cells[2].trim() === uniqueValue) {
             newRowValues.push(cells.map((cell) => cell.trim()));
 
-            // Sum the values from the seventh cell
-            if (cells[6]) {
-                seventhCellTotal += parseFloat(cells[6].trim());
+            // Sum the values from the eighth cell
+            if (cells[7]) {
+                eighthCellTotal += parseFloat(cells[7].trim());
             }
         }
     });
@@ -123,10 +123,10 @@ function createNewRow(lines, uniqueValue) {
         });
     }
 
-    // Add the total sum of the seventh cell to the seventh cell of the new row
-    const seventhCellTotalElement = document.createElement("td");
-    seventhCellTotalElement.textContent = seventhCellTotal;
-    newRow.appendChild(seventhCellTotalElement);
+    // Add the total sum of the eighth cell to the eighth cell of the new row
+    const eighthCellTotalElement = document.createElement("td");
+    eighthCellTotalElement.textContent = eighthCellTotal;
+    newRow.appendChild(eighthCellTotalElement);
 
     // Add the "Budjettipuu" column to the new row
     const budjettipuuCell = document.createElement("td");
