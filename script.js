@@ -18,7 +18,7 @@ function handleCSVFile(file) {
             cells.forEach((cell, cellIndex) => {
                 const cellElement = index === 0 ? document.createElement("th") : document.createElement("td");
                 cellElement.textContent = cell.trim();
-                
+
                 // If it's the first row, set the cell as a table header (th)
                 if (index === 0) {
                     cellElement.scope = "col";
@@ -35,7 +35,8 @@ function handleCSVFile(file) {
         tableContainer.appendChild(table);
     };
 
-    reader.readAsText(file);
+    // Specify the encoding as UTF-8 when reading the file
+    reader.readAsText(file, 'UTF-8');
 }
 
 // Add an event listener to the file input element
