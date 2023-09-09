@@ -43,9 +43,9 @@ function handleCSVFile(file) {
                 row.insertBefore(budjettipuuHeader, row.firstChild);
             } else {
                 // For data rows, calculate and add the "Budjettipuu" value
-                const firstColumn = cells[0].trim();
-                const thirdColumn = cells[2].trim();
-                const fifthColumn = cells[4].trim();
+                const firstColumn = cells[0] ? cells[0].trim() : "";
+                const thirdColumn = cells[2] ? cells[2].trim() : "";
+                const fifthColumn = cells[4] ? cells[4].trim() : "";
                 const budjettipuuCell = document.createElement("td");
                 budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}`;
                 row.insertBefore(budjettipuuCell, row.firstChild);
