@@ -1,18 +1,23 @@
-// Function to read a CSV file with ";" as separator and convert it into a table
+// Function to read a CSV file and convert it into a table with UTF-8 encoding
 function handleCSVFile(file) {
     const reader = new FileReader();
 
     reader.onload = function (e) {
         const contents = e.target.result;
-        const lines = contents.split("\n");
         const tableContainer = document.getElementById("tableContainer");
+
+        // Convert the CSV data to UTF-8 encoding using TextDecoder
+        const utf8Decoder = new TextDecoder("utf-8");
+        const utf8Text = utf8Decoder.decode(new Uint8Array(contents));
+
+        const lines = utf8Text.split("\n");
 
         // Create a table element
         const table = document.createElement("table");
 
         // Loop through CSV lines
         lines.forEach((line, index) => {
-            const row = document.createElement("tr");
+            const row = document.createElement(index === 0 ? "th" : "tr");
             const cells = line.split(";"); // Use semicolon as the separator
 
             cells.forEach((cell, cellIndex) => {
@@ -35,8 +40,7 @@ function handleCSVFile(file) {
         tableContainer.appendChild(table);
     };
 
-    // Specify the encoding as UTF-8 when reading the file
-    reader.readAsText(file, 'UTF-8');
+    reader.readAsArrayBuffer(file);
 }
 
 // Add an event listener to the file input element
