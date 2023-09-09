@@ -1,4 +1,4 @@
-// Function to read a CSV file and convert it into a table
+// Function to read a CSV file with ";" as separator and convert it into a table
 function handleCSVFile(file) {
     const reader = new FileReader();
 
@@ -13,7 +13,7 @@ function handleCSVFile(file) {
         // Loop through CSV lines
         lines.forEach((line, index) => {
             const row = document.createElement(index === 0 ? "th" : "tr");
-            const cells = line.split(",");
+            const cells = line.split(";"); // Use semicolon as the separator
 
             cells.forEach((cell) => {
                 const cellElement = index === 0 ? document.createElement("th") : document.createElement("td");
