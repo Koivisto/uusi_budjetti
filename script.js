@@ -56,9 +56,9 @@ function handleCSVFile(file) {
                 budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}.`;
                 row.insertBefore(budjettipuuCell, row.firstChild);
 
-                // Store unique values from the third column by creating unique row identifier by combining first column
+                // Store unique values from the third column
                 if (cells[2]) {
-                    const uniqueValue = createMomenttitaso2uniqueID(cells[0], cells[2]);
+                    const uniqueValue = cells[2].trim();
                     if (!uniqueValues3c.includes(uniqueValue)) {
                         uniqueValues3c.push(uniqueValue);
                     }
@@ -101,10 +101,6 @@ function handleCSVFile(file) {
     reader.readAsArrayBuffer(file);
 }
 
-function createMomenttitaso2uniqueID(momenttitaso1, momenttitaso2) {
-    return `${momenttitaso1.trim()}.${momenttitaso2.trim()}.`
-}
-
 // Function to create a new row based on a unique value in the third column
 function createMomenttitaso2(lines, uniqueValue) {
     const newRow = document.createElement("tr");
@@ -115,7 +111,7 @@ function createMomenttitaso2(lines, uniqueValue) {
     // Find rows with matching values in the third column
     lines.forEach((line) => {
         const cells = line.split(";");
-        if (cells[2] && createMomenttitaso2uniqueID(uniqueValue, cells[2]) === uniqueValue) {
+        if (cells[2] && cells[2].trim() === uniqueValue) {
             newRowValues.push(cells.map((cell) => cell.trim()));
         }
     });
