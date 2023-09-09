@@ -197,7 +197,7 @@ function calculateSumsOfMatchingCells(lines, firstCellValue, thirdCellValue) {
 
     lines.forEach((line) => {
         const cells = line.split(";");
-        if (cells[0] && cells[0].trim() === firstCellValue && cells[2] && (cells[2].trim() === thirdCellValue || thirdCellValue === null)) {
+        if (cells[0] && cells[0].trim() === firstCellValue && cells[2] && (createMomenttitaso2uniqueID(firstCellValue,cells[2]) === thirdCellValue || thirdCellValue === null)) {
             for (let cellIndex = 7; cellIndex <= 19; cellIndex++) {
                 if (cells[cellIndex]) {
                     sums[cellIndex - 7] += parseFloat(cells[cellIndex]);
