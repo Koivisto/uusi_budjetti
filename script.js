@@ -1,46 +1,3 @@
-// Function to create a new row based on a unique value in the first column
-function createMomenttitaso1(lines, uniqueValue) {
-    const newRow = document.createElement("tr");
-
-    // Initialize an array to store values for the new row
-    const newRowValues = [];
-
-    // Find rows with matching values in the first column
-    lines.forEach((line) => {
-        const cells = line.split(";");
-        if (cells[0] && cells[0].trim() === uniqueValue) {
-            newRowValues.push(cells.map((cell) => cell.trim()));
-        }
-    });
-
-    // Calculate the sums of each cell with matching first cell values
-    const sums = calculateSumsOfMatchingCells(lines, newRowValues[0][0], "");
-
-    // Fill in values for the new row based on the row beneath it
-    if (newRowValues.length > 0) {
-        newRowValues[0].forEach((value, cellIndex) => {
-            const cellElement = document.createElement("td");
-            if (cellIndex >= 7 && cellIndex <= 19) {
-                // Set the sum of the corresponding cell with matching first cell values
-                cellElement.textContent = sums[cellIndex - 7]; // Adjust the index
-            } else if (cellIndex === 3 || cellIndex === 4 || cellIndex === 5) {
-                // Ensure the fourth, fifth, and sixth cells are empty
-                cellElement.textContent = "";
-            } else {
-                cellElement.textContent = value;
-            }
-            newRow.appendChild(cellElement);
-        });
-    }
-
-    // Add the "Budjettipuu" column to the new row
-    const budjettipuuCell = document.createElement("td");
-    budjettipuuCell.textContent = `${newRowValues[0][0]}.`;
-    newRow.insertBefore(budjettipuuCell, newRow.firstChild);
-
-    return newRow;
-}
-
 // Function to read a CSV file in "Nordic (ISO 8859-10)" encoding and convert it to UTF-8
 function handleCSVFile(file) {
     const reader = new FileReader();
@@ -61,7 +18,7 @@ function handleCSVFile(file) {
         // Initialize a flag to identify the header row
         let isFirstRow = true;
 
-        // Initialize an array to store unique values from the first column
+        // Initialize an array to store unique values from the third column
         const uniqueValues = [];
 
         // Loop through CSV lines
@@ -99,7 +56,6 @@ function handleCSVFile(file) {
                 // Store unique values from the third column
                 if (cells[2]) {
                     const uniqueValue = cells[2].trim();
-                // Store unique values from the first column
                     if (!uniqueValues.includes(uniqueValue)) {
                         uniqueValues.push(uniqueValue);
                     }
@@ -117,12 +73,6 @@ function handleCSVFile(file) {
         // Create new rows based on unique values in the third column
         uniqueValues.forEach((uniqueValue) => {
             const newRow = createMomenttitaso2(lines, uniqueValue);
-            table.appendChild(newRow);
-        });
-
-        // Create new rows based on unique values in the first column
-        uniqueValues.forEach((uniqueValue) => {
-            const newRow = createMomenttitaso1(lines, uniqueValue);
             table.appendChild(newRow);
         });
 
