@@ -103,7 +103,12 @@ function createNewRow(lines, uniqueValue) {
     if (newRowValues.length > 0) {
         newRowValues[0].forEach((value, cellIndex) => {
             const cellElement = document.createElement("td");
-            cellElement.textContent = value;
+            if (cellIndex === 7) {
+                // Calculate and set the sum of "2+2" in the seventh cell
+                cellElement.textContent = "4";
+            } else {
+                cellElement.textContent = value;
+            }
             newRow.appendChild(cellElement);
         });
     }
@@ -115,6 +120,7 @@ function createNewRow(lines, uniqueValue) {
 
     return newRow;
 }
+
 
 // Add an event listener to the file input element
 const fileInput = document.getElementById("csvFileInput");
