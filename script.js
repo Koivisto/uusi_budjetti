@@ -122,17 +122,26 @@ function createNewRow(lines, uniqueValue) {
     return newRow;
 }
 
-// Function to calculate the sum of values in the eighth cell of the first n lines
-function calculateSumOfEighthCell(lines, n = 10) {
+const firstCellValue = "YourFirstCellValue"; // Replace with the actual first cell value
+const thirdCellValue = "YourThirdCellValue"; // Replace with the actual third cell value
+
+const sumOfEighthCell = calculateSumOfEighthCell(lines.slice(1), firstCellValue, thirdCellValue);
+
+
+// Function to calculate the sum of values in the eighth cell for rows with matching first and third cell values
+function calculateSumOfEighthCell(lines, firstCellValue, thirdCellValue) {
     let sum = 0;
-    for (let i = 0; i < Math.min(n, lines.length); i++) {
-        const cells = lines[i].split(";");
-        if (cells[7]) {
-            sum += parseFloat(cells[7]);
+    lines.forEach((line) => {
+        const cells = line.split(";");
+        if (cells[0] && cells[0].trim() === firstCellValue && cells[2] && cells[2].trim() === thirdCellValue) {
+            if (cells[7]) {
+                sum += parseFloat(cells[7]);
+            }
         }
-    }
+    });
     return sum;
 }
+
 
 // Add an event listener to the file input element
 const fileInput = document.getElementById("csvFileInput");
