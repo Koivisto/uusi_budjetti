@@ -72,7 +72,7 @@ function handleCSVFile(file) {
 
         // Create new rows based on unique values in the third column
         uniqueValues.forEach((uniqueValue) => {
-            const newRow = createNewRow(lines, uniqueValue);
+            const newRow = createMomenttitaso2(lines, uniqueValue);
             table.appendChild(newRow);
         });
 
@@ -128,16 +128,16 @@ function createMomenttitaso2(lines, uniqueValue) {
 }
 
 
-// Function to calculate the sums of each cell with matching first and third cell values
+// Function to calculate the sums of specified cells (8th to 20th) with matching first and third cell values
 function calculateSumsOfMatchingCells(lines, firstCellValue, thirdCellValue) {
-    const sums = Array(8).fill(0);
+    const sums = Array(13).fill(0); // Initialize an array for cells 8 to 20
 
     lines.forEach((line) => {
         const cells = line.split(";");
         if (cells[0] && cells[0].trim() === firstCellValue && cells[2] && cells[2].trim() === thirdCellValue) {
-            for (let cellIndex = 0; cellIndex < sums.length; cellIndex++) {
+            for (let cellIndex = 7; cellIndex <= 19; cellIndex++) {
                 if (cells[cellIndex]) {
-                    sums[cellIndex] += parseFloat(cells[cellIndex]);
+                    sums[cellIndex - 7] += parseFloat(cells[cellIndex]);
                 }
             }
         }
