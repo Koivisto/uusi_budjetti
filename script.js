@@ -106,12 +106,12 @@ function createMomenttitaso2(lines, uniqueValue) {
     if (newRowValues.length > 0) {
         newRowValues[0].forEach((value, cellIndex) => {
             const cellElement = document.createElement("td");
-            if (cellIndex === 3 || cellIndex === 4 || cellIndex === 5) {
+            if (cellIndex >= 7 && cellIndex <= 19) {
+                // Set the sum of the corresponding cell with matching first and third cell values
+                cellElement.textContent = sums[cellIndex - 7]; // Adjust the index
+            } else if (cellIndex === 3 || cellIndex === 4 || cellIndex === 5) {
                 // Ensure the fourth, fifth, and sixth cells are empty
                 cellElement.textContent = "";
-            } else if (cellIndex === 7) {
-                // Set the sum of the eighth cell with matching first and third cell values
-                cellElement.textContent = sums[cellIndex];
             } else {
                 cellElement.textContent = value;
             }
@@ -145,6 +145,7 @@ function calculateSumsOfMatchingCells(lines, firstCellValue, thirdCellValue) {
 
     return sums;
 }
+
 
 // Add an event listener to the file input element
 const fileInput = document.getElementById("csvFileInput");
