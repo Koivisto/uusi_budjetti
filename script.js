@@ -104,8 +104,9 @@ function createNewRow(lines, uniqueValue) {
         newRowValues[0].forEach((value, cellIndex) => {
             const cellElement = document.createElement("td");
             if (cellIndex === 7) {
-                // Calculate and set the sum of "2+2" in the seventh cell
-                cellElement.textContent = "4";
+                // Calculate and set the sum of values in the eighth cell of the first 10 lines
+                const sumOfEighthCell = calculateSumOfEighthCell(lines.slice(1, 11));
+                cellElement.textContent = sumOfEighthCell;
             } else {
                 cellElement.textContent = value;
             }
@@ -121,6 +122,17 @@ function createNewRow(lines, uniqueValue) {
     return newRow;
 }
 
+// Function to calculate the sum of values in the eighth cell of the first n lines
+function calculateSumOfEighthCell(lines, n = 10) {
+    let sum = 0;
+    for (let i = 0; i < Math.min(n, lines.length); i++) {
+        const cells = lines[i].split(";");
+        if (cells[7]) {
+            sum += parseFloat(cells[7]);
+        }
+    }
+    return sum;
+}
 
 // Add an event listener to the file input element
 const fileInput = document.getElementById("csvFileInput");
