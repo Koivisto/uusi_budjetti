@@ -18,6 +18,9 @@ function handleCSVFile(file) {
         // Initialize a flag to identify the header row
         let isFirstRow = true;
 
+        // Initialize an array to store unique values from the third column
+        const uniqueValues = [];
+
         // Loop through CSV lines
         lines.forEach((line, index) => {
             const row = document.createElement("tr");
@@ -65,7 +68,34 @@ function handleCSVFile(file) {
             // After processing the first row, set the flag to false
             if (isFirstRow) {
                 isFirstRow = false;
+            } else {
+                // Store unique values from the third column
+                if (cells[2]) {
+                    const uniqueValue = cells[2].trim();
+                    if (!uniqueValues.includes(uniqueValue)) {
+                        uniqueValues.push(uniqueValue);
+                    }
+                }
             }
+        });
+
+        // Create new rows based on unique values in the third column
+        uniqueValues.forEach((uniqueValue) => {
+            const newRow = document.createElement("tr");
+
+            // Fill in values for the new row based on the row beneath it
+            lines.forEach((line, index) => {
+                const cells = line.split(";");
+                if (cells[2] && cells[2].trim() === uniqueValue) {
+                    cells.forEach((cell, cellIndex) => {
+                        const cellElement = document.createElement("td");
+                        cellElement.textContent = cell.trim();
+                        newRow.appendChild(cellElement);
+                    });
+                }
+            });
+
+            table.appendChild(newRow);
         });
 
         // Clear previous table and append the new one
