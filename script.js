@@ -1,4 +1,4 @@
-// Function to read a CSV file and convert it into a table with UTF-8 encoding
+// Function to read a CSV file in "Nordic (ISO 8859-10)" encoding and convert it to UTF-8
 function handleCSVFile(file) {
     const reader = new FileReader();
 
@@ -6,9 +6,9 @@ function handleCSVFile(file) {
         const contents = e.target.result;
         const tableContainer = document.getElementById("tableContainer");
 
-        // Convert the CSV data to UTF-8 encoding using TextDecoder
-        const utf8Decoder = new TextDecoder("utf-8");
-        const utf8Text = utf8Decoder.decode(new Uint8Array(contents));
+        // Convert the CSV data to UTF-8 encoding
+        const iso8859_10Decoder = new TextDecoder("iso-8859-10");
+        const utf8Text = iso8859_10Decoder.decode(contents);
 
         const lines = utf8Text.split("\n");
 
@@ -17,7 +17,7 @@ function handleCSVFile(file) {
 
         // Loop through CSV lines
         lines.forEach((line, index) => {
-            const row = document.createElement(index === 0 ? "th" : "tr");
+            const row = document.createElement("tr");
             const cells = line.split(";"); // Use semicolon as the separator
 
             cells.forEach((cell, cellIndex) => {
