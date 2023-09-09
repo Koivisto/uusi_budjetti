@@ -56,20 +56,20 @@ function handleCSVFile(file) {
                 budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}.`;
                 row.insertBefore(budjettipuuCell, row.firstChild);
 
-                // Store unique values from the third column
-                if (cells[2]) {
-                    const uniqueValue = cells[2].trim();
-                    if (!uniqueValues3c.includes(uniqueValue)) {
-                        uniqueValues3c.push(uniqueValue);
-                    }
-                }
-
                 // Store unique values from the first column
                 if (cells[0]) {
-                    const uniqueValue = cells[0].trim();
-                    if (!uniqueValues1c.includes(uniqueValue)) {
-                        uniqueValues1c.push(uniqueValue);
+                    const uniqueValue1 = cells[0].trim();
+                    if (!uniqueValues1c.includes(uniqueValue1)) {
+                        uniqueValues1c.push(uniqueValue1);
                     }
+                    // Store unique values from the third column
+                    if (cells[2]) {
+                        const uniqueValue3and1 = `${cells[0].trim()}.${cells[2].trim()}`;
+                        if (!uniqueValues3c.includes(uniqueValue3and1)) {
+                            uniqueValues3c.push(uniqueValue3and1);
+                        }
+                    }
+
                 }
             }
 
@@ -111,7 +111,7 @@ function createMomenttitaso2(lines, uniqueValue) {
     // Find rows with matching values in the third column
     lines.forEach((line) => {
         const cells = line.split(";");
-        if (cells[2] && cells[2].trim() === uniqueValue) {
+        if (cells[2] && `${cells[0].trim()}.${cells[2].trim()}` === uniqueValue) {
             newRowValues.push(cells.map((cell) => cell.trim()));
         }
     });
