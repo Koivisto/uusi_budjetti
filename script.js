@@ -81,20 +81,7 @@ function handleCSVFile(file) {
 
         // Create new rows based on unique values in the third column
         uniqueValues.forEach((uniqueValue) => {
-            const newRow = document.createElement("tr");
-
-            // Fill in values for the new row based on the row beneath it
-            lines.forEach((line, index) => {
-                const cells = line.split(";");
-                if (cells[2] && cells[2].trim() === uniqueValue) {
-                    cells.forEach((cell, cellIndex) => {
-                        const cellElement = document.createElement("td");
-                        cellElement.textContent = cell.trim();
-                        newRow.appendChild(cellElement);
-                    });
-                }
-            });
-
+            const newRow = createNewRow(lines, uniqueValue);
             table.appendChild(newRow);
         });
 
@@ -104,6 +91,38 @@ function handleCSVFile(file) {
     };
 
     reader.readAsArrayBuffer(file);
+}
+
+// Function to create a new row based on a unique value in the third column
+function createNewRow(lines, uniqueValue) {
+    const newRow = document.createElement("tr");
+
+    // Initialize an array to store values for the new row
+    const newRowValues = [];
+
+    // Find rows with matching values in the third column
+    lines.forEach((line) => {
+        const cells = line.split(";");
+        if (cells[2] && cells[2].trim() === uniqueValue) {
+            newRowValues.push(cells.map((cell) => cell.trim()));
+        }
+    });
+
+    // Fill in values for the new row based on the row beneath it
+    if (newRowValues.length > 0) {
+        newRowValues[0].forEach((value, cellIndex) => {
+            const cellElement = document.createElement("td");
+            cellElement.textContent = value;
+            newRow.appendChild(cellElement);
+        });
+    }
+
+    // Add the "Budjettipuu" column to the new row
+    const budjettipuuCell = document.createElement("td");
+    budjettipuuCell.textContent = `${newRowValues[0][0]}.${newRowValues[0][2]}.${newRowValues[0][4]}.`;
+    newRow.insertBefore(budjettipuuCell, newRow.firstChild);
+
+    return newRow;
 }
 
 // Add an event listener to the file input element
