@@ -41,6 +41,49 @@ function createMomenttitaso1(lines, uniqueValue) {
     return newRow;
 }
 
+// Function to create a new row based on a unique value in the third column
+function createMomenttitaso2(lines, uniqueValue) {
+    const newRow = document.createElement("tr");
+
+    // Initialize an array to store values for the new row
+    const newRowValues = [];
+
+    // Find rows with matching values in the third column
+    lines.forEach((line) => {
+        const cells = line.split(";");
+        if (cells[2] && cells[2].trim() === uniqueValue) {
+            newRowValues.push(cells.map((cell) => cell.trim()));
+        }
+    });
+
+    // Calculate the sums of each cell with matching first and third cell values
+    const sums = calculateSumsOfMatchingCells(lines, newRowValues[0][0], newRowValues[0][2]);
+
+    // Fill in values for the new row based on the row beneath it
+    if (newRowValues.length > 0) {
+        newRowValues[0].forEach((value, cellIndex) => {
+            const cellElement = document.createElement("td");
+            if (cellIndex >= 7 && cellIndex <= 19) {
+                // Set the sum of the corresponding cell with matching first and third cell values
+                cellElement.textContent = sums[cellIndex - 7]; // Adjust the index
+            } else if (cellIndex === 3 || cellIndex === 4 || cellIndex === 5) {
+                // Ensure the fourth, fifth, and sixth cells are empty
+                cellElement.textContent = "";
+            } else {
+                cellElement.textContent = value;
+            }
+            newRow.appendChild(cellElement);
+        });
+    }
+
+    // Add the "Budjettipuu" column to the new row
+    const budjettipuuCell = document.createElement("td");
+    budjettipuuCell.textContent = `${newRowValues[0][0]}.${newRowValues[0][2]}.${newRowValues[0][4]}.`;
+    newRow.insertBefore(budjettipuuCell, newRow.firstChild);
+
+    return newRow;
+}
+
 // Function to read a CSV file in "Nordic (ISO 8859-10)" encoding and convert it to UTF-8
 function handleCSVFile(file) {
     const reader = new FileReader();
@@ -96,10 +139,9 @@ function handleCSVFile(file) {
                 budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}.`;
                 row.insertBefore(budjettipuuCell, row.firstChild);
 
-                // Store unique values from the third column
-                if (cells[2]) {
-                    const uniqueValue = cells[2].trim();
                 // Store unique values from the first column
+                if (cells[0]) {
+                    const uniqueValue = cells[0].trim();
                     if (!uniqueValues.includes(uniqueValue)) {
                         uniqueValues.push(uniqueValue);
                     }
@@ -114,15 +156,15 @@ function handleCSVFile(file) {
             }
         });
 
-        // Create new rows based on unique values in the third column
-        uniqueValues.forEach((uniqueValue) => {
-            const newRow = createMomenttitaso2(lines, uniqueValue);
-            table.appendChild(newRow);
-        });
-
         // Create new rows based on unique values in the first column
         uniqueValues.forEach((uniqueValue) => {
             const newRow = createMomenttitaso1(lines, uniqueValue);
+            table.appendChild(newRow);
+        });
+
+        // Create new rows based on unique values in the third column
+        uniqueValues.forEach((uniqueValue) => {
+            const newRow = createMomenttitaso2(lines, uniqueValue);
             table.appendChild(newRow);
         });
 
@@ -134,48 +176,6 @@ function handleCSVFile(file) {
     reader.readAsArrayBuffer(file);
 }
 
-// Function to create a new row based on a unique value in the third column
-function createMomenttitaso2(lines, uniqueValue) {
-    const newRow = document.createElement("tr");
-
-    // Initialize an array to store values for the new row
-    const newRowValues = [];
-
-    // Find rows with matching values in the third column
-    lines.forEach((line) => {
-        const cells = line.split(";");
-        if (cells[2] && cells[2].trim() === uniqueValue) {
-            newRowValues.push(cells.map((cell) => cell.trim()));
-        }
-    });
-
-    // Calculate the sums of each cell with matching first and third cell values
-    const sums = calculateSumsOfMatchingCells(lines, newRowValues[0][0], newRowValues[0][2]);
-
-    // Fill in values for the new row based on the row beneath it
-    if (newRowValues.length > 0) {
-        newRowValues[0].forEach((value, cellIndex) => {
-            const cellElement = document.createElement("td");
-            if (cellIndex >= 7 && cellIndex <= 19) {
-                // Set the sum of the corresponding cell with matching first and third cell values
-                cellElement.textContent = sums[cellIndex - 7]; // Adjust the index
-            } else if (cellIndex === 3 || cellIndex === 4 || cellIndex === 5) {
-                // Ensure the fourth, fifth, and sixth cells are empty
-                cellElement.textContent = "";
-            } else {
-                cellElement.textContent = value;
-            }
-            newRow.appendChild(cellElement);
-        });
-    }
-
-    // Add the "Budjettipuu" column to the new row
-    const budjettipuuCell = document.createElement("td");
-    budjettipuuCell.textContent = `${newRowValues[0][0]}.${newRowValues[0][2]}.${newRowValues[0][4]}.`;
-    newRow.insertBefore(budjettipuuCell, newRow.firstChild);
-
-    return newRow;
-}
 
 // Function to calculate the sums of specified cells (8th to 20th) with matching first and third cell values
 function calculateSumsOfMatchingCells(lines, firstCellValue, thirdCellValue) {
@@ -195,7 +195,6 @@ function calculateSumsOfMatchingCells(lines, firstCellValue, thirdCellValue) {
     return sums;
 }
 
-
 // Add an event listener to the file input element
 const fileInput = document.getElementById("csvFileInput");
 fileInput.addEventListener("change", (e) => {
@@ -204,3 +203,4 @@ fileInput.addEventListener("change", (e) => {
         handleCSVFile(selectedFile);
     }
 });
+
