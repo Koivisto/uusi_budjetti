@@ -99,14 +99,16 @@ function createNewRow(lines, uniqueValue) {
         }
     });
 
+    // Calculate the sums of each cell with matching first and third cell values
+    const sums = calculateSumsOfMatchingCells(lines, newRowValues[0][0], newRowValues[0][2]);
+
     // Fill in values for the new row based on the row beneath it
     if (newRowValues.length > 0) {
         newRowValues[0].forEach((value, cellIndex) => {
             const cellElement = document.createElement("td");
             if (cellIndex === 7) {
-                // Calculate and set the sum of values in the eighth cell of the first 10 lines
-                const sumOfEighthCell = calculateSumOfEighthCell(lines.slice(1, 11));
-                cellElement.textContent = sumOfEighthCell;
+                // Set the sum of the eighth cell with matching first and third cell values
+                cellElement.textContent = sums[cellIndex];
             } else {
                 cellElement.textContent = value;
             }
@@ -122,26 +124,23 @@ function createNewRow(lines, uniqueValue) {
     return newRow;
 }
 
-const firstCellValue = "YourFirstCellValue"; // Replace with the actual first cell value
-const thirdCellValue = "YourThirdCellValue"; // Replace with the actual third cell value
+// Function to calculate the sums of each cell with matching first and third cell values
+function calculateSumsOfMatchingCells(lines, firstCellValue, thirdCellValue) {
+    const sums = Array(8).fill(0);
 
-const sumOfEighthCell = calculateSumOfEighthCell(lines.slice(1), firstCellValue, thirdCellValue);
-
-
-// Function to calculate the sum of values in the eighth cell for rows with matching first and third cell values
-function calculateSumOfEighthCell(lines, firstCellValue, thirdCellValue) {
-    let sum = 0;
     lines.forEach((line) => {
         const cells = line.split(";");
         if (cells[0] && cells[0].trim() === firstCellValue && cells[2] && cells[2].trim() === thirdCellValue) {
-            if (cells[7]) {
-                sum += parseFloat(cells[7]);
+            for (let cellIndex = 0; cellIndex < sums.length; cellIndex++) {
+                if (cells[cellIndex]) {
+                    sums[cellIndex] += parseFloat(cells[cellIndex]);
+                }
             }
         }
     });
-    return sum;
-}
 
+    return sums;
+}
 
 // Add an event listener to the file input element
 const fileInput = document.getElementById("csvFileInput");
