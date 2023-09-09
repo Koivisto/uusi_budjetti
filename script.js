@@ -106,7 +106,10 @@ function createNewRow(lines, uniqueValue) {
     if (newRowValues.length > 0) {
         newRowValues[0].forEach((value, cellIndex) => {
             const cellElement = document.createElement("td");
-            if (cellIndex === 7) {
+            if (cellIndex === 3 || cellIndex === 4 || cellIndex === 5) {
+                // Ensure the fourth, fifth, and sixth cells are empty
+                cellElement.textContent = "";
+            } else if (cellIndex === 7) {
                 // Set the sum of the eighth cell with matching first and third cell values
                 cellElement.textContent = sums[cellIndex];
             } else {
@@ -123,6 +126,7 @@ function createNewRow(lines, uniqueValue) {
 
     return newRow;
 }
+
 
 // Function to calculate the sums of each cell with matching first and third cell values
 function calculateSumsOfMatchingCells(lines, firstCellValue, thirdCellValue) {
