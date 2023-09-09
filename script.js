@@ -12,12 +12,18 @@ function handleCSVFile(file) {
 
         // Loop through CSV lines
         lines.forEach((line, index) => {
-            const row = document.createElement(index === 0 ? "th" : "tr");
+            const row = document.createElement("tr");
             const cells = line.split(";"); // Use semicolon as the separator
 
-            cells.forEach((cell) => {
+            cells.forEach((cell, cellIndex) => {
                 const cellElement = index === 0 ? document.createElement("th") : document.createElement("td");
                 cellElement.textContent = cell.trim();
+                
+                // If it's the first row, set the cell as a table header (th)
+                if (index === 0) {
+                    cellElement.scope = "col";
+                }
+
                 row.appendChild(cellElement);
             });
 
