@@ -99,15 +99,19 @@ function createNewRow(lines, uniqueValue) {
         }
     });
 
+    console.log("newRowValues:", newRowValues); // Debug print
+
     // Fill in values for the new row based on the row beneath it
     if (newRowValues.length > 0) {
         newRowValues[0].forEach((value, cellIndex) => {
             const cellElement = document.createElement("td");
-
+            console.log("here:", newRowValues); // Debug print
             // Leave the fifth and sixth cells empty
             if (cellIndex === 4 || cellIndex === 5) {
                 cellElement.textContent = "";
             } else if (cellIndex === 7) {
+                console.log("Calculating total sum of eighth cell"); // Debug print
+
                 // Calculate the total sum of the eighth cell
                 const eighthCellTotal = newRowValues.reduce((sum, row) => {
                     if (row[7]) {
@@ -116,9 +120,12 @@ function createNewRow(lines, uniqueValue) {
                     return sum;
                 }, 0);
 
+                console.log("Eighth cell total:", eighthCellTotal); // Debug print
+
                 cellElement.textContent = eighthCellTotal;
             } else {
                 cellElement.textContent = value;
+                console.log("herehere:", newRowValues); // Debug print
             }
 
             newRow.appendChild(cellElement);
