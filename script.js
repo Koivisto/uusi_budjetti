@@ -97,7 +97,7 @@ function createNewRow(lines, uniqueValue) {
     // Find rows with matching values in the first and third columns
     lines.forEach((line) => {
         const cells = line.split(";");
-        if (cells[0] && cells[0].trim() === newRowValues[0]?.[0] && cells[2] && cells[2].trim() === uniqueValue) {
+        if (cells[0] && cells[0].trim() === newRowValues[0][0] && cells[2] && cells[2].trim() === uniqueValue) {
             newRowValues.push(cells.map((cell) => cell.trim()));
 
             // Sum the values from the seventh cell
@@ -130,12 +130,11 @@ function createNewRow(lines, uniqueValue) {
 
     // Add the "Budjettipuu" column to the new row
     const budjettipuuCell = document.createElement("td");
-    budjettipuuCell.textContent = `${newRowValues[0]?.[0] || ""}.${newRowValues[0]?.[2] || ""}.${newRowValues[0]?.[4] || ""}.`;
+    budjettipuuCell.textContent = `${newRowValues[0][0]}.${newRowValues[0][2]}.${newRowValues[0][4]}.`;
     newRow.insertBefore(budjettipuuCell, newRow.firstChild);
 
     return newRow;
 }
-
 
 // Add an event listener to the file input element
 const fileInput = document.getElementById("csvFileInput");
