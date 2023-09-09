@@ -91,19 +91,11 @@ function createNewRow(lines, uniqueValue) {
     // Initialize an array to store values for the new row
     const newRowValues = [];
 
-    // Initialize a variable to store the total sum of the eighth cell
-    let eighthCellTotal = 0;
-
     // Find rows with matching values in the first and third columns
     lines.forEach((line) => {
         const cells = line.split(";");
         if (cells[0] && cells[0].trim() === newRowValues[0]?.[0] && cells[2] && cells[2].trim() === uniqueValue) {
             newRowValues.push(cells.map((cell) => cell.trim()));
-
-            // Sum the values from the eighth cell
-            if (cells[7]) {
-                eighthCellTotal += parseFloat(cells[7].trim());
-            }
         }
     });
 
@@ -115,6 +107,16 @@ function createNewRow(lines, uniqueValue) {
             // Leave the fifth and sixth cells empty
             if (cellIndex === 4 || cellIndex === 5) {
                 cellElement.textContent = "";
+            } else if (cellIndex === 7) {
+                // Calculate the total sum of the eighth cell
+                const eighthCellTotal = newRowValues.reduce((sum, row) => {
+                    if (row[7]) {
+                        return sum + parseFloat(row[7]);
+                    }
+                    return sum;
+                }, 0);
+
+                cellElement.textContent = eighthCellTotal;
             } else {
                 cellElement.textContent = value;
             }
@@ -123,11 +125,6 @@ function createNewRow(lines, uniqueValue) {
         });
     }
 
-    // Add the total sum of the eighth cell to the eighth cell of the new row
-    const eighthCellTotalElement = document.createElement("td");
-    eighthCellTotalElement.textContent = eighthCellTotal;
-    newRow.appendChild(eighthCellTotalElement);
-
     // Add the "Budjettipuu" column to the new row
     const budjettipuuCell = document.createElement("td");
     budjettipuuCell.textContent = `${newRowValues[0]?.[0] || ""}.${newRowValues[0]?.[2] || ""}.${newRowValues[0]?.[4] || ""}.`;
@@ -135,6 +132,7 @@ function createNewRow(lines, uniqueValue) {
 
     return newRow;
 }
+
 
 
 // Add an event listener to the file input element
