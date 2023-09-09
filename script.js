@@ -1,4 +1,5 @@
 // Initialize an array to store unique values from the third column
+const uniqueValues135c = [];
 const uniqueValues3c = [];
 const uniqueValues1c = [];
 // Create a table element
@@ -67,15 +68,21 @@ function handleCSVFile(file) {
 
                 // Store unique values from the first column
                 if (cells[0]) {
-                    const uniqueValue1 = cells[0].trim();
+                    const uniqueValue1 = `${cells[0].trim()}.`;
                     if (!uniqueValues1c.includes(uniqueValue1)) {
                         uniqueValues1c.push(uniqueValue1);
                     }
                     // Store unique values from the third column
                     if (cells[2]) {
-                        const uniqueValue3and1 = `${cells[0].trim()}.${cells[2].trim()}`;
+                        const uniqueValue3and1 = `${cells[0].trim()}.${cells[2].trim()}.`;
                         if (!uniqueValues3c.includes(uniqueValue3and1)) {
                             uniqueValues3c.push(uniqueValue3and1);
+                        }
+                        if(cells[4]) {
+                            const uniqueValue5and3and1 = `${cells[0].trim()}.${cells[2].trim()}.${cells[4].trim()}.`;
+                            if (!uniqueValues135c.includes(uniqueValue5and3and1)) {
+                                uniqueValues135c.push(uniqueValue5and3and1);
+                            }
                         }
                     }
 
@@ -120,7 +127,7 @@ function createMomenttitaso2(lines, uniqueValue) {
     // Find rows with matching values in the third column
     lines.forEach((line) => {
         const cells = line.split(";");
-        if (cells[2] && `${cells[0].trim()}.${cells[2].trim()}` === uniqueValue) {
+        if (cells[2] && `${cells[0].trim()}.${cells[2].trim()}.` === uniqueValue) {
             newRowValues.push(cells.map((cell) => cell.trim()));
         }
     });
@@ -246,10 +253,20 @@ function syncTable() {
     // Find values that are in newValues but not in the current "Budjettipuu" column
     const missingValues = newValues.filter((newValue) => {
         // Extract the "Budjettipuu" value from the newValue
-        const budjettipuuValue = newValue.split(".")[0];
+        const budjettipuuValue3 = `${newValue.split(".")[0]}.${newValue.split(".")[1]}.${newValue.split(".")[2]}.`;
+        const budjettipuuValue2 = `${newValue.split(".")[0]}.${newValue.split(".")[1]}.`;
+        const budjettipuuValue1 = `${newValue.split(".")[0]}.`;
 
         // Check if it doesn't exist in the current "Budjettipuu" values
-        return !uniqueValues1c.includes(budjettipuuValue);
+        if(!uniqueValues135c.includes(budjettipuuValue3)) {
+            return !uniqueValues135c.includes(budjettipuuValue3);
+        }
+        if(!uniqueValues3c.includes(budjettipuuValue2)) {
+            return !uniqueValues3c.includes(budjettipuuValue2);
+        }        
+        if(!uniqueValues1c.includes(budjettipuuValue1)) {
+            return !uniqueValues1c.includes(budjettipuuValue1);
+        }
     });
 
     // Create empty table rows for missing values
