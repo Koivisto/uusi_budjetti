@@ -99,18 +99,19 @@ function createNewRow(lines, uniqueValue) {
         }
     });
 
-    console.log("newRowValues:", newRowValues); // Debug print
+    // Debug print to check newRowValues
+    console.log("newRowValues:", newRowValues);
 
     // Fill in values for the new row based on the row beneath it
-    if (newRowValues.length > 0) {
+    if (newRowValues.length > 0 && newRowValues[0]) {
         newRowValues[0].forEach((value, cellIndex) => {
             const cellElement = document.createElement("td");
-            console.log("here:", newRowValues); // Debug print
+
             // Leave the fifth and sixth cells empty
             if (cellIndex === 4 || cellIndex === 5) {
                 cellElement.textContent = "";
             } else if (cellIndex === 7) {
-                console.log("Calculating total sum of eighth cell"); // Debug print
+                console.log("Calculating total sum of eighth cell");
 
                 // Calculate the total sum of the eighth cell
                 const eighthCellTotal = newRowValues.reduce((sum, row) => {
@@ -120,16 +121,24 @@ function createNewRow(lines, uniqueValue) {
                     return sum;
                 }, 0);
 
-                console.log("Eighth cell total:", eighthCellTotal); // Debug print
+                console.log("Eighth cell total:", eighthCellTotal);
 
                 cellElement.textContent = eighthCellTotal;
             } else {
                 cellElement.textContent = value;
-                console.log("herehere:", newRowValues); // Debug print
             }
 
             newRow.appendChild(cellElement);
         });
+    } else {
+        // If there are no matching rows, add empty cells to the new row
+        for (let i = 0; i < 8; i++) {
+            const cellElement = document.createElement("td");
+            if (i === 4 || i === 5) {
+                cellElement.textContent = "";
+            }
+            newRow.appendChild(cellElement);
+        }
     }
 
     // Add the "Budjettipuu" column to the new row
