@@ -127,7 +127,6 @@ function createMomenttitaso2(lines, uniqueValue) {
     return newRow;
 }
 
-
 // Function to calculate the sums of specified cells (8th to 20th) with matching first and third cell values
 function calculateSumsOfMatchingCells(lines, firstCellValue, thirdCellValue) {
     const sums = Array(13).fill(0); // Initialize an array for cells 8 to 20
