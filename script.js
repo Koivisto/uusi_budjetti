@@ -47,7 +47,7 @@ function handleCSVFile(file) {
                 const thirdColumn = cells[2] ? cells[2].trim() : "";
                 const fifthColumn = cells[4] ? cells[4].trim() : "";
                 const budjettipuuCell = document.createElement("td");
-                budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}`;
+                budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}.`; // Add "." at the end
                 row.insertBefore(budjettipuuCell, row.firstChild);
             }
 
