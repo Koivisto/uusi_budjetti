@@ -15,24 +15,48 @@ function handleCSVFile(file) {
         // Create a table element
         const table = document.createElement("table");
 
+        // Initialize a flag to identify the header row
+        let isFirstRow = true;
+
         // Loop through CSV lines
         lines.forEach((line, index) => {
             const row = document.createElement("tr");
             const cells = line.split(";"); // Use semicolon as the separator
 
             cells.forEach((cell, cellIndex) => {
-                const cellElement = index === 0 ? document.createElement("th") : document.createElement("td");
+                const cellElement = isFirstRow ? document.createElement("th") : document.createElement("td");
                 cellElement.textContent = cell.trim();
 
-                // If it's the first row, set the cell as a table header (th)
-                if (index === 0) {
+                // If it's the header row, set the cell as a table header (th)
+                if (isFirstRow) {
                     cellElement.scope = "col";
                 }
 
                 row.appendChild(cellElement);
             });
 
+            // Add the "Budjettipuu" column to the header and data rows
+            if (isFirstRow) {
+                // For the header row, add a "Budjettipuu" header
+                const budjettipuuHeader = document.createElement("th");
+                budjettipuuHeader.textContent = "Budjettipuu";
+                row.insertBefore(budjettipuuHeader, row.firstChild);
+            } else {
+                // For data rows, calculate and add the "Budjettipuu" value
+                const firstColumn = cells[0].trim();
+                const thirdColumn = cells[2].trim();
+                const fifthColumn = cells[4].trim();
+                const budjettipuuCell = document.createElement("td");
+                budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}`;
+                row.insertBefore(budjettipuuCell, row.firstChild);
+            }
+
             table.appendChild(row);
+
+            // After processing the first row, set the flag to false
+            if (isFirstRow) {
+                isFirstRow = false;
+            }
         });
 
         // Clear previous table and append the new one
