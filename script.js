@@ -4,6 +4,8 @@ const uniqueValues1c = [];
 // Create a table element
 const table = document.createElement("table");
 const tableContainer = document.getElementById("tableContainer");
+const tbody = document.createElement("tbody"); // Define tbody here
+table.appendChild(tbody); // Append tbody to the table
 
 // Function to read a CSV file in "Nordic (ISO 8859-10)" encoding and convert it to UTF-8
 function handleCSVFile(file) {
@@ -82,7 +84,7 @@ function handleCSVFile(file) {
                 }
             }
 
-            table.appendChild(row);
+            tbody.appendChild(row);
 
             // After processing the first row, set the flag to false
             if (isFirstRow) {
@@ -252,10 +254,12 @@ function syncTable() {
         return !uniqueValues1c.includes(budjettipuuValue);
     });
 
+    const tableBody = document.getElementById("table"); // Get the tbody element
+
     // Iterate through missing values
     missingValues.forEach((missingValue) => {
         // Check if the missingValue is already in the table
-        const isAlreadyInTable = Array.from(table.children).some((row) => {
+        const isAlreadyInTable = Array.from(tableBody.children).some((row) => {
             const budjettipuuCell = row.querySelector("td:first-child");
             return budjettipuuCell && budjettipuuCell.textContent === missingValue;
         });
@@ -263,12 +267,7 @@ function syncTable() {
         // If not already in the table, create and insert a new row
         if (!isAlreadyInTable) {
             const newRow = createEmptyRow(missingValue);
-            // Insert the new row as the first child of the table
-            if (table.firstChild) {
-                table.insertBefore(newRow, table.firstChild);
-            } else {
-                table.appendChild(newRow);
-            }
+            tableBody.appendChild(newRow); // Append the new row to the tbody
 
             // Log the added line to the console
             console.log(`Added line for: ${missingValue}`);
