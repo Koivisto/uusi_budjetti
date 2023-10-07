@@ -170,6 +170,11 @@ function processCSVLines(lines, tbody, isFirstRow) {
 
             tbody.appendChild(row);
         }
+        //Remove useless last row that is generated each time
+        if (tbody.lastChild) {
+            // Remove the last row
+            tbody.removeChild(tbody.lastChild);
+        }
 
         // After processing the first row, set the flag to false
         if (isFirstRow) {
