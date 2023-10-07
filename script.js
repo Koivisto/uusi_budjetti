@@ -120,14 +120,14 @@ function processCSVLines(lines, tbody, isFirstRow) {
         }
     });
 
-    console.log("Tehdään momenttitaso 2 ja summaus");
+    console.log("Tehdään momenttitaso 2 ja summaus puuttuneille");
     console.log(uniqueValues3and1);
     // Create new rows based on unique values in the combined first and third columns
     uniqueValues3and1.forEach((uniqueValue) => {
         const newRow = createMomenttitaso2(lines, uniqueValue);
         tbody.appendChild(newRow);
     });
-    console.log("Tehdään momenttitaso 1 ja summaus");
+    console.log("Tehdään momenttitaso 1 ja summaus puuttuneille");
     console.log(uniqueValues1c);
     // Create new rows based on unique values in the first column
     uniqueValues1c.forEach((uniqueValue) => {
