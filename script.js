@@ -2,10 +2,9 @@
 const uniqueValues3c = [];
 const uniqueValues1c = [];
 // Create a table element
-const table = document.createElement("table");
 const tableContainer = document.getElementById("tableContainer");
-const tbody = document.createElement("tbody"); // Define tbody here
-table.appendChild(tbody); // Append tbody to the table
+const table = createTable(); // Create the table element
+const tbody = document.createElement("tbody"); // Create the tbody element
 
 // Function to read a CSV file in "Nordic (ISO 8859-10)" encoding and convert it to UTF-8
 function handleCSVFile(file) {
@@ -13,26 +12,25 @@ function handleCSVFile(file) {
 
     reader.onload = function (e) {
         const contents = e.target.result;
-        const utf8Text = convertToUTF8(contents);
+
+        const utf8Text = convertToUTF8(contents); // Use the convertToUTF8 function
+
         const lines = utf8Text.split("\n");
 
-        const table = createTable();
-        const isFirstRow = processCSVLines(lines, table);
+        const table = createTable(); // Use the createTable function
+        const tbody = document.createElement("tbody"); // Create a tbody element
 
-        // Create new rows based on unique values in the third column
-        uniqueValues3c.forEach((uniqueValue) => {
-            const newRow = createMomenttitaso2(lines, uniqueValue);
-            table.appendChild(newRow);
-        });
+        // Initialize a flag to identify the header row
+        let isFirstRow = true;
 
-        // Create new rows based on unique values in the first column
-        uniqueValues1c.forEach((uniqueValue) => {
-            const newRow = createMomenttitaso1(lines, uniqueValue);
-            table.appendChild(newRow);
-        });
+        // Loop through CSV lines
+        isFirstRow = processCSVLines(lines, tbody, isFirstRow); // Call the processCSVLines function
 
         // Clear previous table and append the new one
-        updateTableContainer(table);
+        table.innerHTML = "";
+        tbody.appendChild(table);
+        tableContainer.innerHTML = "";
+        tableContainer.appendChild(tbody);
     };
 
     reader.readAsArrayBuffer(file);
@@ -113,14 +111,6 @@ function processCSVLines(lines, tbody, isFirstRow) {
 
     return isFirstRow;
 }
-
-
-function updateTableContainer(table) {
-    const tableContainer = document.getElementById("tableContainer");
-    tableContainer.innerHTML = "";
-    tableContainer.appendChild(table);
-}
-
 
 // Function to create a new row based on a unique value in the third column
 function createMomenttitaso2(lines, uniqueValue) {
