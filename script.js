@@ -13,84 +13,11 @@ function handleCSVFile(file) {
 
     reader.onload = function (e) {
         const contents = e.target.result;
-
-
-        // Convert the CSV data to UTF-8 encoding
-        //budjetti.vm.fi https://budjetti.vm.fi/indox/opendata/ = iso-8859-10
-        //Good practice is UTF-8
-        const encryptionDecoder = new TextDecoder("utf-8"); 
-        const utf8Text = encryptionDecoder.decode(contents);
-
+        const utf8Text = convertToUTF8(contents);
         const lines = utf8Text.split("\n");
 
-
-
-        // Initialize a flag to identify the header row
-        let isFirstRow = true;
-
-        // Loop through CSV lines
-        lines.forEach((line, index) => {
-            const row = document.createElement("tr");
-            const cells = line.split(";"); // Use semicolon as the separator
-
-            cells.forEach((cell, cellIndex) => {
-                const cellElement = isFirstRow ? document.createElement("th") : document.createElement("td");
-                cellElement.textContent = cell.trim();
-
-                // If it's the header row, set the cell as a table header (th)
-                if (isFirstRow) {
-                    cellElement.scope = "col";
-                }
-
-                row.appendChild(cellElement);
-            });
-
-            // Add the "Budjettipuu" column to the header and data rows
-            if (isFirstRow) {
-                // For the header row, add headers
-                const budjettipuuHeader = document.createElement("th");
-                budjettipuuHeader.textContent = "Budjettipuu";
-                row.insertBefore(budjettipuuHeader, row.firstChild);
-                const momenttitasoHeader = document.createElement("th");
-                momenttitasoHeader.textContent = "Momenttitaso";
-                row.insertBefore(momenttitasoHeader, row.firstChild);
-            } else {
-                // For data rows, calculate and add the "Budjettipuu" value
-                const firstColumn = cells[0] ? cells[0].trim() : "";
-                const thirdColumn = cells[2] ? cells[2].trim() : "";
-                const fifthColumn = cells[4] ? cells[4].trim() : "";
-                const budjettipuuCell = document.createElement("td");
-                budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}.`;
-                row.insertBefore(budjettipuuCell, row.firstChild);
-
-                const momenttitasoCell = document.createElement("td");
-                momenttitasoCell.textContent = `3`;
-                row.insertBefore(momenttitasoCell, row.firstChild);
-
-                // Store unique values from the first column
-                if (cells[0]) {
-                    const uniqueValue1 = cells[0].trim();
-                    if (!uniqueValues1c.includes(uniqueValue1)) {
-                        uniqueValues1c.push(uniqueValue1);
-                    }
-                    // Store unique values from the third column
-                    if (cells[2]) {
-                        const uniqueValue3and1 = `${cells[0].trim()}.${cells[2].trim()}`;
-                        if (!uniqueValues3c.includes(uniqueValue3and1)) {
-                            uniqueValues3c.push(uniqueValue3and1);
-                        }
-                    }
-
-                }
-            }
-
-            tbody.appendChild(row);
-
-            // After processing the first row, set the flag to false
-            if (isFirstRow) {
-                isFirstRow = false;
-            }
-        });
+        const table = createTable();
+        const isFirstRow = processCSVLines(lines, table);
 
         // Create new rows based on unique values in the third column
         uniqueValues3c.forEach((uniqueValue) => {
@@ -105,12 +32,97 @@ function handleCSVFile(file) {
         });
 
         // Clear previous table and append the new one
-        tableContainer.innerHTML = "";
-        tableContainer.appendChild(table);
+        updateTableContainer(table);
     };
 
     reader.readAsArrayBuffer(file);
 }
+
+function convertToUTF8(contents) {
+    const encryptionDecoder = new TextDecoder("utf-8");
+    return encryptionDecoder.decode(contents);
+}
+
+function createTable() {
+    const table = document.createElement("table");
+    return table;
+}
+
+function processCSVLines(lines, table) {
+    let isFirstRow = true;
+
+    lines.forEach((line, index) => {
+        const row = document.createElement("tr");
+        const cells = line.split(";"); // Use semicolon as the separator
+
+        cells.forEach((cell, cellIndex) => {
+            const cellElement = isFirstRow ? document.createElement("th") : document.createElement("td");
+            cellElement.textContent = cell.trim();
+
+            // If it's the header row, set the cell as a table header (th)
+            if (isFirstRow) {
+                cellElement.scope = "col";
+            }
+
+            row.appendChild(cellElement);
+        });
+
+        // Add the "Budjettipuu" column to the header and data rows
+        if (isFirstRow) {
+            // For the header row, add headers
+            const budjettipuuHeader = document.createElement("th");
+            budjettipuuHeader.textContent = "Budjettipuu";
+            row.insertBefore(budjettipuuHeader, row.firstChild);
+            const momenttitasoHeader = document.createElement("th");
+            momenttitasoHeader.textContent = "Momenttitaso";
+            row.insertBefore(momenttitasoHeader, row.firstChild);
+        } else {
+            // For data rows, calculate and add the "Budjettipuu" value
+            const firstColumn = cells[0] ? cells[0].trim() : "";
+            const thirdColumn = cells[2] ? cells[2].trim() : "";
+            const fifthColumn = cells[4] ? cells[4].trim() : "";
+            const budjettipuuCell = document.createElement("td");
+            budjettipuuCell.textContent = `${firstColumn}.${thirdColumn}.${fifthColumn}.`;
+            row.insertBefore(budjettipuuCell, row.firstChild);
+
+            const momenttitasoCell = document.createElement("td");
+            momenttitasoCell.textContent = `3`;
+            row.insertBefore(momenttitasoCell, row.firstChild);
+
+            // Store unique values from the first column
+            if (cells[0]) {
+                const uniqueValue1 = cells[0].trim();
+                if (!uniqueValues1c.includes(uniqueValue1)) {
+                    uniqueValues1c.push(uniqueValue1);
+                }
+                // Store unique values from the third column
+                if (cells[2]) {
+                    const uniqueValue3and1 = `${cells[0].trim()}.${cells[2].trim()}`;
+                    if (!uniqueValues3c.includes(uniqueValue3and1)) {
+                        uniqueValues3c.push(uniqueValue3and1);
+                    }
+                }
+            }
+
+            table.appendChild(row);
+        }
+
+        // After processing the first row, set the flag to false
+        if (isFirstRow) {
+            isFirstRow = false;
+        }
+    });
+
+    return isFirstRow;
+}
+
+
+function updateTableContainer(table) {
+    const tableContainer = document.getElementById("tableContainer");
+    tableContainer.innerHTML = "";
+    tableContainer.appendChild(table);
+}
+
 
 // Function to create a new row based on a unique value in the third column
 function createMomenttitaso2(lines, uniqueValue) {
