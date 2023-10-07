@@ -4,8 +4,17 @@ const uniqueValues1c = [];
 const uniqueValues3and1 = [];
 // Create a table element
 const tableContainer = document.getElementById("tableContainer");
-const table = createTable(); // Create the table element
+const table = document.createElement("table");
 const tbody = document.createElement("tbody"); // Create the tbody element
+
+// Add an event listener to the file input element
+const fileInput = document.getElementById("UTF8csvFileInput");
+fileInput.addEventListener("change", (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+        handleCSVFile(selectedFile);
+    }
+});
 
 // Function to read a CSV file in "Nordic (ISO 8859-10)" encoding and convert it to UTF-8
 function handleCSVFile(file) {
@@ -23,6 +32,56 @@ function handleCSVFile(file) {
         //Good practice is UTF-8
         const encryptionDecoder = new TextDecoder("utf-8"); 
         const utf8Text = encryptionDecoder.decode(contents);
+
+        // Remove double quotes from the CSV text
+        const cleanedText = utf8Text.replace(/"/g, "");
+        const lines = cleanedText.split("\n");
+        console.log("Saatiin rivejä:", lines.length);
+
+        const table = document.createElement("table");
+        const tbody = document.createElement("tbody"); // Create a tbody element
+
+        // Initialize a flag to identify the header row
+        let isFirstRow = true;
+
+        // Loop through CSV lines
+        isFirstRow = processCSVLines(lines, tbody, isFirstRow); // Call the processCSVLines function
+
+        // Clear previous table and append the new one
+        tableContainer.innerHTML = "";
+        table.innerHTML = "";
+        tableContainer.appendChild(table);
+        table.appendChild(tbody);
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+// Add an event listener to the file input element
+const fileInput2 = document.getElementById("ISO885910csvFileInput");
+fileInput2.addEventListener("change", (e) => {
+    const selectedFile = e.target.files[0];
+    if (selectedFile) {
+        handleISOCSVFile(selectedFile);
+    }
+});
+
+// Function to read a CSV file in "Nordic (ISO 8859-10)" encoding and convert it to UTF-8
+function handleISOCSVFile(file) {
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        const contents = e.target.result;
+
+        // Convert the CSV data to UTF-8 encoding
+        // A:
+        // budjetti.vm.fi https://budjetti.vm.fi/indox/opendata/ = iso-8859-10
+        const iso8859_10Decoder = new TextDecoder("iso-8859-10");
+        const utf8Text = iso8859_10Decoder.decode(contents);
+        // B:
+        //Good practice is UTF-8
+        //const encryptionDecoder = new TextDecoder("utf-8"); 
+        //const utf8Text = encryptionDecoder.decode(contents);
 
         // Remove double quotes from the CSV text
         const cleanedText = utf8Text.replace(/"/g, "");
@@ -247,16 +306,6 @@ function calculateSumsOfMatchingCells(lines, firstCellValue, thirdCellValue) {
 
     return sums;
 }
-
-
-// Add an event listener to the file input element
-const fileInput = document.getElementById("csvFileInput");
-fileInput.addEventListener("change", (e) => {
-    const selectedFile = e.target.files[0];
-    if (selectedFile) {
-        handleCSVFile(selectedFile);
-    }
-});
 
 // Add an HTML input field for the new values
 const newValuesInput = document.getElementById("newValuesInput");
