@@ -2,8 +2,10 @@
  Tämä skripti muuntaa VM:n antamat CSV:t taulukkomuotoon josta on helpompi työstää budjettia taulukko-ohjelmissa. 
  * Laskee VM:n CSV:stä puuttuvat 2. ja 1. tason momentit valmiiksi.
  * Tekee CSV:stä saatavan uuden budjetin vanhaan taulukkomuodossa olevaan budjettiin sopivaksi.
+
  Aarne Leinonen, ChatGPT3.5 apuna. Vapaasti vaihtoehtobudjettien tekijöiden iloksi. Liberaalipuolue - Vapaus valita 2024 vaihtoehtobudjetin nopeaa rutistusta varsinkin auttamaan.
 
+## Seuraa näitä vaiheita:
  0. Lataa tämän repositorion tiedostot, tai ainakin index.html ja script.js samaan kansioon ja avaa selaimella index.html-tiedosto
 
 ## Hae Budjetti
