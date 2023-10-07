@@ -232,13 +232,6 @@ fileInput.addEventListener("change", (e) => {
     }
 });
 
-// Add an HTML input field for the new values
-const newValuesInput = document.getElementById("newValuesInput");
-
-// Add a button to trigger the synchronization
-const syncButton = document.getElementById("syncButton");
-syncButton.addEventListener("click", syncTable);
-
 // Function to synchronize the table based on new values
 function syncTable() {
     const newValues = newValuesInput.value.split("\n").map((value) => value.trim());
@@ -252,12 +245,27 @@ function syncTable() {
         return !uniqueValues1c.includes(budjettipuuValue);
     });
 
-    // Create empty table rows for missing values
+    // Iterate through missing values
     missingValues.forEach((missingValue) => {
-        const newRow = createEmptyRow(missingValue);
-        table.appendChild(newRow);
+        // Check if the missingValue is already in the table
+        const isAlreadyInTable = Array.from(table.children).some((row) => {
+            const budjettipuuCell = row.querySelector("td:first-child");
+            return budjettipuuCell && budjettipuuCell.textContent === missingValue;
+        });
+
+        // If not already in the table, create and insert a new row
+        if (!isAlreadyInTable) {
+            const newRow = createEmptyRow(missingValue);
+            // Insert the new row as the first child of the table
+            if (table.firstChild) {
+                table.insertBefore(newRow, table.firstChild);
+            } else {
+                table.appendChild(newRow);
+            }
+        }
     });
 }
+
 
 // Function to create an empty row based on missingValues input
 function createEmptyRow(missingValues) {
