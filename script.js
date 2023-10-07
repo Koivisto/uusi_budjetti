@@ -254,23 +254,17 @@ function syncTable() {
         return !uniqueValues1c.includes(budjettipuuValue);
     });
 
-    const tableBody = document.getElementById("table"); // Get the tbody element
+    // Check if there's an existing table
+    const existingTable = document.querySelector("#tableContainer table");
+    const tbody = existingTable ? existingTable.querySelector("tbody") : null;
 
-    // Iterate through missing values
+    // Create empty table rows for missing values and add them inside the tbody
     missingValues.forEach((missingValue) => {
-        // Check if the missingValue is already in the table
-        const isAlreadyInTable = Array.from(tableBody.children).some((row) => {
-            const budjettipuuCell = row.querySelector("td:first-child");
-            return budjettipuuCell && budjettipuuCell.textContent === missingValue;
-        });
-
-        // If not already in the table, create and insert a new row
-        if (!isAlreadyInTable) {
-            const newRow = createEmptyRow(missingValue);
-            tableBody.appendChild(newRow); // Append the new row to the tbody
-
-            // Log the added line to the console
-            console.log(`Added line for: ${missingValue}`);
+        const newRow = createEmptyRow(missingValue);
+        if (tbody) {
+            tbody.appendChild(newRow);
+        } else {
+            console.error("Table or tbody not found.");
         }
     });
 }
