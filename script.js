@@ -48,9 +48,7 @@ function createTable() {
     return table;
 }
 
-function processCSVLines(lines, table) {
-    let isFirstRow = true;
-
+function processCSVLines(lines, tbody, isFirstRow) {
     lines.forEach((line, index) => {
         const row = document.createElement("tr");
         const cells = line.split(";"); // Use semicolon as the separator
@@ -104,7 +102,7 @@ function processCSVLines(lines, table) {
                 }
             }
 
-            table.appendChild(row);
+            tbody.appendChild(row);
         }
 
         // After processing the first row, set the flag to false
