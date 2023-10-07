@@ -27,10 +27,10 @@ function handleCSVFile(file) {
         isFirstRow = processCSVLines(lines, tbody, isFirstRow); // Call the processCSVLines function
 
         // Clear previous table and append the new one
-        table.innerHTML = "";
-        tbody.appendChild(table);
         tableContainer.innerHTML = "";
-        tableContainer.appendChild(tbody);
+        table.innerHTML = "";
+        tableContainer.appendChild(table);
+        table.appendChild(tbody);
     };
 
     reader.readAsArrayBuffer(file);
@@ -245,24 +245,23 @@ syncButton.addEventListener("click", syncTable);
 function syncTable() {
     const newValues = newValuesInput.value.split("\n").map((value) => value.trim());
 
+    // Add this before the filtering code
+    console.log("newValues:", newValues);
+    const uniqueBudjettipuuValues = getUniqueBudjettipuuValues();
+    console.log(uniqueBudjettipuuValues);
+
     // Find values that are in newValues but not in the current "Budjettipuu" column
     const missingValues = newValues.filter((newValue) => {
-        // Extract the "Budjettipuu" value from the newValue
-        const budjettipuuValue = newValue.split(".")[0];
-
         // Check if it doesn't exist in the current "Budjettipuu" values
-        return !uniqueValues1c.includes(budjettipuuValue);
+        return !uniqueBudjettipuuValues.includes(newValue);
     });
+
+    console.log("missingValues:", missingValues);
+
 
     // Check if there's an existing table
     const existingTable = document.querySelector("#tableContainer table");
-    if (existingTable) {
-      existingTable.innerHTML = ""; // Clear the existing table
-      tbody.appendChild(table); // Append tbody to the existing table
-    } else {
-      // Handle the case where the table is not found
-      console.error("Table not found.");
-    }
+    const tbody = existingTable ? existingTable.querySelector("tbody") : null;
 
     // Create empty table rows for missing values and add them inside the tbody
     missingValues.forEach((missingValue) => {
@@ -275,6 +274,27 @@ function syncTable() {
     });
 }
 
+function getUniqueBudjettipuuValues() {
+    const uniqueBudjettipuuValues = [];
+
+    // Select the table element
+    const table = document.querySelector("table");
+
+    // Iterate through the rows of the table
+    const rows = table.querySelectorAll("tr");
+    for (let i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
+        const row = rows[i];
+        const budjettipuuCell = row.querySelector("td:nth-child(2)"); // Assuming the "Budjettipuu" cell is the first one
+        if (budjettipuuCell) {
+            const budjettipuuValue = budjettipuuCell.textContent.trim();
+            if (!uniqueBudjettipuuValues.includes(budjettipuuValue)) {
+                uniqueBudjettipuuValues.push(budjettipuuValue);
+            }
+        }
+    }
+
+    return uniqueBudjettipuuValues;
+}
 
 // Function to create an empty row based on missingValues input
 function createEmptyRow(missingValues) {
