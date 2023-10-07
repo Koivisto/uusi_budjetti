@@ -16,7 +16,9 @@ function handleCSVFile(file) {
 
         const utf8Text = convertToUTF8(contents); // Use the convertToUTF8 function
 
-        const lines = utf8Text.split("\n");
+        // Remove double quotes from the CSV text
+        const cleanedText = utf8Text.replace(/"/g, "");
+        const lines = cleanedText.split("\n");
 
         const table = createTable(); // Use the createTable function
         const tbody = document.createElement("tbody"); // Create a tbody element
