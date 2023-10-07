@@ -19,6 +19,7 @@ function handleCSVFile(file) {
         // Remove double quotes from the CSV text
         const cleanedText = utf8Text.replace(/"/g, "");
         const lines = cleanedText.split("\n");
+        console.log("Saatiin rivejä:", lines.length);
 
         const table = createTable(); // Use the createTable function
         const tbody = document.createElement("tbody"); // Create a tbody element
@@ -127,6 +128,7 @@ function processCSVLines(lines, tbody, isFirstRow) {
         tbody.appendChild(newRow);
     });
     console.log("Tehdään momenttitaso 1 ja summaus");
+    console.log(uniqueValues1c);
     // Create new rows based on unique values in the first column
     uniqueValues1c.forEach((uniqueValue) => {
         const newRow = createMomenttitaso1(lines, uniqueValue);
@@ -270,9 +272,10 @@ function syncTable() {
     const newValues = newValuesInput.value.split("\n").map((value) => value.trim());
 
     // Add this before the filtering code
-    console.log("newValues:", newValues);
+    console.log("Annetut vanhan budjetin kaikki momentit:", newValues);
+
     const uniqueBudjettipuuValues = getUniqueBudjettipuuValues();
-    console.log(uniqueBudjettipuuValues);
+    console.log("Uuden budjetin momentit:", uniqueBudjettipuuValues);
 
     // Find values that are in newValues but not in the current "Budjettipuu" column
     const missingValues = newValues.filter((newValue) => {
@@ -280,7 +283,7 @@ function syncTable() {
         return !uniqueBudjettipuuValues.includes(newValue);
     });
 
-    console.log("missingValues:", missingValues);
+    console.log("Vanhan budjetin momentit joita ei ollut uudessa:", missingValues);
 
 
     // Check if there's an existing table
