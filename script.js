@@ -14,14 +14,22 @@ function handleCSVFile(file) {
     reader.onload = function (e) {
         const contents = e.target.result;
 
-        const utf8Text = convertToUTF8(contents); // Use the convertToUTF8 function
+        // Convert the CSV data to UTF-8 encoding
+        // A:
+        // budjetti.vm.fi https://budjetti.vm.fi/indox/opendata/ = iso-8859-10
+        //const iso8859_10Decoder = new TextDecoder("iso-8859-10");
+        //const utf8Text = iso8859_10Decoder.decode(contents);
+        // B:
+        //Good practice is UTF-8
+        const encryptionDecoder = new TextDecoder("utf-8"); 
+        const utf8Text = encryptionDecoder.decode(contents);
 
         // Remove double quotes from the CSV text
         const cleanedText = utf8Text.replace(/"/g, "");
         const lines = cleanedText.split("\n");
         console.log("Saatiin rivejä:", lines.length);
 
-        const table = createTable(); // Use the createTable function
+        const table = document.createElement("table");
         const tbody = document.createElement("tbody"); // Create a tbody element
 
         // Initialize a flag to identify the header row
@@ -38,16 +46,6 @@ function handleCSVFile(file) {
     };
 
     reader.readAsArrayBuffer(file);
-}
-
-function convertToUTF8(contents) {
-    const encryptionDecoder = new TextDecoder("utf-8");
-    return encryptionDecoder.decode(contents);
-}
-
-function createTable() {
-    const table = document.createElement("table");
-    return table;
 }
 
 function processCSVLines(lines, tbody, isFirstRow) {
