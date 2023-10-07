@@ -15,7 +15,7 @@
  4. Yhdistä kaikki CSV tiedostot notepadilla yhteen tiedostoon. _Vaihtoehtoisesti käytä kansiossa data olevaa "yhdistelmä budjetti TAE 2024.csv"-tiedostoa. Varmista että VM ei ole lisäillyt ylimääräisiä puolipisteitä tai muita merkkejä joilla CSV sekoaa tai tekee virheellisiä rivimittoja. Otsikkorivejä voi vähentää nyt tai taulukko-ohjelmassa._
 
 ## Avaa index.html
- 5. Syötä CSV tiedosto kenttään.
+ 5. Syötä CSV tiedosto kenttään. _Valitse Nordic (ISO 8859-10) jos käytät VM:n CSV-tiedostoa suoraan sellaisenaan. Jos puolestaan sinulla on UTF-8 enkoodattu tiedosto, niin valitse se._
 
 ## Vertaa vanhaan budjettiin
  6. Käytä edellisen vuoden budjetin "budjettipuu"-kolumnia jonka muoto on momenttitasot eroteltuna pisteillä, tyyliin "33.40.54." _Vaihtoehtoisesti käytä kansiossa data olevaa "Budjettipuu 2023.txt"-tiedostoa, joka on Liberaalipuolueen 2023 vaihtoehtobudjetin rakenne._
