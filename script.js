@@ -232,6 +232,13 @@ fileInput.addEventListener("change", (e) => {
     }
 });
 
+// Add an HTML input field for the new values
+const newValuesInput = document.getElementById("newValuesInput");
+
+// Add a button to trigger the synchronization
+const syncButton = document.getElementById("syncButton");
+syncButton.addEventListener("click", syncTable);
+
 // Function to synchronize the table based on new values
 function syncTable() {
     const newValues = newValuesInput.value.split("\n").map((value) => value.trim());
@@ -262,6 +269,9 @@ function syncTable() {
             } else {
                 table.appendChild(newRow);
             }
+
+            // Log the added line to the console
+            console.log(`Added line for: ${missingValue}`);
         }
     });
 }
