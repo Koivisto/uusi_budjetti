@@ -1,6 +1,7 @@
 // Initialize an array to store unique values from the third column
 const uniqueValues3c = [];
 const uniqueValues1c = [];
+const uniqueValues3and1 = [];
 // Create a table element
 const tableContainer = document.getElementById("tableContainer");
 const table = createTable(); // Create the table element
@@ -99,6 +100,13 @@ function processCSVLines(lines, tbody, isFirstRow) {
                     }
                 }
             }
+            // Store unique values from the combined first and third columns
+            if (cells[0] && cells[2]) {
+                const uniqueValue3and1 = `${cells[0].trim()}.${cells[2].trim()}`;
+                if (!uniqueValues3and1.includes(uniqueValue3and1)) {
+                    uniqueValues3and1.push(uniqueValue3and1);
+                }
+            }
 
             tbody.appendChild(row);
         }
@@ -107,6 +115,20 @@ function processCSVLines(lines, tbody, isFirstRow) {
         if (isFirstRow) {
             isFirstRow = false;
         }
+    });
+
+    console.log("Tehdään momenttitaso 2 ja summaus");
+    console.log(uniqueValues3and1);
+    // Create new rows based on unique values in the combined first and third columns
+    uniqueValues3and1.forEach((uniqueValue) => {
+        const newRow = createMomenttitaso2(lines, uniqueValue);
+        tbody.appendChild(newRow);
+    });
+    console.log("Tehdään momenttitaso 1 ja summaus");
+    // Create new rows based on unique values in the first column
+    uniqueValues1c.forEach((uniqueValue) => {
+        const newRow = createMomenttitaso1(lines, uniqueValue);
+        tbody.appendChild(newRow);
     });
 
     return isFirstRow;
