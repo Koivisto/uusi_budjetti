@@ -256,7 +256,13 @@ function syncTable() {
 
     // Check if there's an existing table
     const existingTable = document.querySelector("#tableContainer table");
-    const tbody = existingTable ? existingTable.querySelector("tbody") : null;
+    if (existingTable) {
+      existingTable.innerHTML = ""; // Clear the existing table
+      tbody.appendChild(table); // Append tbody to the existing table
+    } else {
+      // Handle the case where the table is not found
+      console.error("Table not found.");
+    }
 
     // Create empty table rows for missing values and add them inside the tbody
     missingValues.forEach((missingValue) => {
